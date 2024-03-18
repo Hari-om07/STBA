@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+    <link rel="stylesheet" href="stylesS.css"> <!-- You can link your CSS file here -->
+</head>
+<body>
+    <h2>Student Corner</h2>
+    <div id="loginForm" class="login-container">
+        <h2>Student Sign Up</h2>
+        <form id="loginFormElement" action="#" method="post">
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" name="username" placeholder="abc@gmail.com" autocomplete="username" required><br><br>
+
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="password" required><br><br>
+
+    
+            <button type="submit" id="submitSignup">login</button>
+        </form>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"; 
+        import { getDatabase, ref, set,  child} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"; 
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAu8wxZs79sLyQ-gxMfwKo_fTTFHEacvkw",
+            authDomain: "student-teacher-appointm-7815e.firebaseapp.com",
+            databaseURL: "https://student-teacher-appointm-7815e-default-rtdb.firebaseio.com",
+            projectId: "student-teacher-appointm-7815e",
+            storageBucket: "student-teacher-appointm-7815e.appspot.com",
+            messagingSenderId: "938793624367",
+            appId: "1:938793624367:web:835bfd8686da0f7829f7da",
+            measurementId: "G-83ZMVXVNXL"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Get a reference to the Firebase database service
+        const db = getDatabase(app);
+
+        document.getElementById("loginFormElement").addEventListener('submit', function(e){
+            e.preventDefault();
+        
+            // Retrieve form values
+            const loginUsername = document.getElementById("loginUsername").value;
+            const loginPassword = document.getElementById("loginPassword").value;
+        
+            // Save message to Firebase
+            const cleanEmail = loginUsername.replace(/\./g, "_"); // Replace "." with "_"
+            const stbaRef = ref(db, 'stba'); // Reference to the 'stba' node
+            const userRef = child(stbaRef, cleanEmail); // Reference to the specific user under 'stba'
+        
+            // Save the user data
+            set(userRef, {
+                username: loginUsername,
+                password: loginPassword
+            }).then(() => {
+                // Clear form fields after successful submission
+                document.getElementById("loginForm").style.display = "none"; // Hide the form
+                alert("login Successful!");
+                // Redirect to student1.html after successful signup
+                window.location.href = "student1.html";
+            }).catch(error => {
+                console.error("Error adding document: ", error);
+                alert("An error occurred while submitting the form.");
+            });
+        });
+    </script>
+    <script src="scriptS.js"></script>
+</body>
+</html>
